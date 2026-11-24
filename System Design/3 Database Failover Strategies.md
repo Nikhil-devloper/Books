@@ -185,26 +185,76 @@ If Database A crashes, the application can continue using Database B.
 
 ---
 
-## 7. Interview Questions
+## 7. Interview Questions with One-Line Answers
 
-Try answering these without looking at your notes.
+**Q1. What is database failover?**
 
-1. What is database failover?
-2. Why is a single database a Single Point of Failure?
-3. What is cold standby?
-4. What are the disadvantages of cold standby?
-5. What is database replication?
-6. What is the difference between cold and warm standby?
-7. What is the difference between warm and hot standby?
-8. Why can hot standby handle read requests?
-9. What is a multi-primary database?
-10. What are the challenges of multi-primary databases?
+Switching application traffic from a failed primary database to a backup database.
+
+**Q2. Why is a single database a Single Point of Failure?**
+
+Because if that database crashes, the entire application may lose access to its data.
+
+**Q3. What is cold standby?**
+
+A backup database is restored from periodic backups when the primary database fails.
+
+**Q4. What are the disadvantages of cold standby?**
+
+High downtime and potential data loss because recovery depends on the last available backup.
+
+**Q5. What is database replication?**
+
+Continuously copying data from one database to another to maintain a backup copy.
+
+**Q6. What is the difference between cold and warm standby?**
+
+Cold standby uses periodic backups, whereas warm standby continuously replicates data.
+
+**Q7. What is the difference between warm and hot standby?**
+
+Warm standby maintains a replicated backup, whereas hot standby can also serve read requests.
+
+**Q8. Why can hot standby handle read requests?**
+
+Because its data is continuously synchronized with the primary database, allowing it to serve reads.
+
+**Q9. What is a multi-primary database?**
+
+Multiple database nodes can independently accept read and write requests.
+
+**Q10. What are the challenges of multi-primary databases?**
+
+Write conflicts, data consistency, synchronization and conflict resolution.
 
 ---
 
-## 8. Quick Revision
+# 8. Quick Revision – Read Before Interviews
 
-- **Cold Standby:** Periodic backup → Restore → Redirect traffic.
-- **Warm Standby:** Continuous replication → Failover when primary crashes.
-- **Hot Standby:** Real-time replication → Supports reads and takes over writes.
-- **Multi-Primary:** Multiple databases accept reads and writes simultaneously.
+### Four Database Failover Strategies
+
+| Strategy | Remember This |
+|---|---|
+| Cold Standby | Periodic backup → Restore → Redirect traffic. |
+| Warm Standby | Continuous replication → Failover when primary crashes. |
+| Hot Standby | Real-time replication → Supports reads and takes over writes. |
+| Multi-Primary | Multiple databases accept reads and writes simultaneously. |
+
+### Important Concepts
+
+- **Failover:** Switching to a backup database when the primary fails.
+- **SPOF:** A single component whose failure can bring down the entire system.
+- **Replication:** Copying data from one database to another.
+- **Cold vs Warm:** Periodic backup vs Continuous replication.
+- **Warm vs Hot:** Backup standby vs Standby that can also serve reads.
+- **Multi-Primary:** Multiple writable database nodes.
+- **Main Multi-Primary Challenge:** Write conflicts and data consistency.
+
+### Interview Memory Triggers
+
+1. Database crashes → Failover.
+2. Periodic backup → Cold standby.
+3. Continuous replication → Warm standby.
+4. Real-time replication + Read traffic → Hot standby.
+5. Multiple writable databases → Multi-primary.
+6. Multiple nodes writing same data → Conflict resolution.
