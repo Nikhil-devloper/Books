@@ -124,12 +124,13 @@ In an e-commerce application:
 - Replication and failover need proper management.
 
 **Interview one-liner:** Hot standby maintains a real-time synchronized backup database that can serve reads and take over writes when the primary fails.
+
 ---
 
-Continuous replication
+**Continuous replication**
 Replication runs continuously, but changes may take a few seconds to reach the replica.
 
-Real-time replication
+**Real-time replication**
 Changes are propagated with very low latency.
 
 ## 5. Multi-Primary Database
