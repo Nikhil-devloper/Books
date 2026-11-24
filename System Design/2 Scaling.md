@@ -294,16 +294,35 @@ patterns, and cost.
 
 Try answering these without looking at your notes:
 
-1.  What is scalability?
-2.  What is the difference between vertical and horizontal scaling?
-3.  Why does vertical scaling have limitations?
-4.  What is a Single Point of Failure (SPOF)?
-5.  Why do we need a load balancer?
-6.  What happens if one application server goes down?
-7.  What is the difference between stateful and stateless servers?
-8.  Why is stateless architecture important for horizontal scaling?
-9.  Where can session information be stored?
-10. When would you choose vertical scaling over horizontal scaling?
+1\. **What is scalability?**\
+The ability of a system to handle increasing workloads by adding resources without significantly degrading performance.
+
+2\. **What is the difference between vertical and horizontal scaling?**\
+Vertical scaling increases resources of an existing server, whereas horizontal scaling adds more servers to distribute the workload.
+
+3\. **Why does vertical scaling have limitations?**\
+Because a server has maximum hardware capacity, increasing costs, and potential downtime during upgrades.
+
+4\. **What is a Single Point of Failure (SPOF)?**\
+A component whose failure can cause the entire system or a critical part of it to become unavailable.
+
+5\. **Why do we need a load balancer?**\
+To distribute incoming traffic across multiple servers, improving availability, scalability, and performance.
+
+6\. **What happens if one application server goes down?**\
+The load balancer detects the unhealthy server and routes traffic to the remaining healthy servers.
+
+7\. **What is the difference between stateful and stateless servers?**\
+Stateful servers maintain client-specific information locally, whereas stateless servers don't depend on locally stored state between requests.
+
+8\. **Why is stateless architecture important for horizontal scaling?**\
+Because any server can handle any request without depending on another server's local session or state.
+
+9\. **Where can session information be stored?**\
+In application memory, Redis, a database, or through client-side tokens such as JWT.
+
+10\. **When would you choose vertical scaling over horizontal scaling?**\
+When traffic is moderate, a single server has sufficient capacity, or distributing the workload across multiple servers adds unnecessary complexity.
 
 ## 13. Quick revision sheet
 
