@@ -5,7 +5,10 @@
 ---
 
 ### Q1. What is Node.js architecture? How do V8 and libuv fit in? `[Critical]`
-**Answer:** Node.js is a JavaScript runtime built on **Chrome V8** (executes JS, manages heap/GC) and **libuv** (cross-platform async I/O, thread pool, event loop). A single main thread runs JS; libuv offloads file I/O, DNS, crypto, zlib to a **worker thread pool** (default 4). Network I/O uses OS mechanisms (epoll/kqueue/IOCP), not always the thread pool.
+**Answer:** Node.js is a JavaScript runtime built on **Chrome V8** (executes JS, manages heap/GC) and **libuv** (cross-platform async I/O, thread pool, event loop).
+and it uses **OS** – Network I/O handling.
+
+A single main thread runs JS; libuv offloads file I/O, DNS, crypto, zlib to a **worker thread pool** (default 4). 
 **Example:**
 ```
 JS Code → V8 Engine → Node.js Bindings → libuv → OS / Thread Pool
