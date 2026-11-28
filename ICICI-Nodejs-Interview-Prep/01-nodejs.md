@@ -99,14 +99,22 @@ fs.readFile('big.txt', (err, data) => { /* ... */ });
 ---
 
 ### Q5. What is `process.nextTick` vs Promise microtasks? `[Critical]`
-**Answer:** `process.nextTick` callbacks run **before** Promise microtasks, and both run **before** the next Event Loop phase. NextTick can **starve** the event loop if it recursively schedules itself. Prefer Promises/`queueMicrotask` for most deferred work; reserve `nextTick` for APIs that must emit before the caller continues.
-**Example:**
-```js
-Promise.resolve().then(() => console.log('promise'));
-process.nextTick(() => console.log('nextTick'));
-// Output: nextTick → promise
-```
-**Follow-up:** Why does Node prefer nextTick first? → Historical API contract: allow cleanup/emit before returning to user code, before Promises existed.
+**Answer:** 
+
+Both are used to execute callbacks after the current synchronous code finishes.
+
+The main difference is their execution priority:
+1. process.nextTick() callbacks execute first.
+2. Promise .then() callbacks execute after process.nextTick().
+3. Both execute before Node.js continues to the next Event Loop phase.
+
+**Follow-up:** What is Event Loop Starvation?
+
+If we continuously schedule process.nextTick() inside itself, it can prevent the Event Loop from processing timers and I/O callbacks.
+
+Why does Node execute nextTick first?
+
+For historical reasons and backward compatibility. process.nextTick() existed before native Promises in Node.js.
 
 ---
 
