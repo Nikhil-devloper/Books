@@ -20,7 +20,26 @@ JS Code → V8 Engine → Node.js Bindings → libuv → OS / Thread Pool
 ---
 
 ### Q2. Explain the Node.js Event Loop and its phases. `[Critical]`
-**Answer:** The Event Loop processes callbacks in ordered phases: **timers** → **pending callbacks** → **idle/prepare** → **poll** → **check** → **close callbacks**. Between phases, **microtasks** (`process.nextTick`, then Promise jobs) run until the queue is empty. `setTimeout`/`setInterval` run in timers; `setImmediate` in check; I/O callbacks mostly in poll.
+**Answer:** 
+The Event Loop is a mechanism provided by libuv that allows Node.js to handle asynchronous operations without blocking the main JavaScript thread.
+
+When an asynchronous operation is started, Node.js delegates it to the OS or libuv's thread pool. Once the operation completes, its callback is scheduled for execution.
+
+The Event Loop executes these callbacks in different phases.
+Event Loop Phases
+There are 6 main phases:
+1. Timers: Executes callbacks scheduled by setTimeout() and setInterval() when their timer thresholds have passed.
+2. Pending Callbacks: Executes certain system-level callbacks deferred from previous operations, such as some TCP error callbacks.
+3. Idle / Prepare: Internal libuv operations. Not something we normally use directly.
+4. Poll: Retrieves new I/O events and executes their callbacks, such as completed network operations.
+5. Check: Executes callbacks scheduled by setImmediate().
+6. Close Callbacks: Executes callbacks when resources are closed, such as a socket's close event.
+Important: Microtasks
+Apart from these phases, Node.js also processes:
+- process.nextTick() callbacks.
+- Promise callbacks (.then(), .catch(), .finally()) and other microtasks.
+These are processed between Event Loop operations, with process.nextTick() having priority over Promise microtasks in normal Node.js execution.
+
 **Example:**
 ```
 ┌───────────────────────────┐
@@ -38,9 +57,22 @@ JS Code → V8 Engine → Node.js Bindings → libuv → OS / Thread Pool
 ---
 
 ### Q3. Node is single-threaded — how does it handle concurrency? `[Critical]`
-**Answer:** The **JS main thread is single-threaded**, so only one JS stack runs at a time. Concurrency comes from the Event Loop + non-blocking I/O: while waiting on network/disk, Node accepts other requests. CPU-bound work still blocks the event loop unless moved to **Worker Threads**, **child_process**, or **Cluster**.
-**Example:** 10,000 concurrent HTTP clients can be served on one process because most time is waiting on I/O, not computing.
-**Follow-up:** Is libuv single-threaded? → No. The event loop runs on the main thread; libuv’s thread pool runs blocking syscalls in parallel.
+**Answer:** Node.js handles concurrency using the Event Loop, non-blocking I/O, libuv and operating system capabilities.
+
+Although JavaScript runs on a single main thread, Node.js internally uses multiple threads for certain background operations.
+
+Here's how it works:
+1. Main Thread: Executes JavaScript code and runs the Event Loop.
+2. Libuv Thread Pool: Handles certain background operations such as file system operations, cryptography and DNS lookup.
+3. Operating System: Handles network I/O asynchronously without blocking the main thread.
+4. Event Loop: Once an asynchronous operation completes, its callback is scheduled for execution on the main thread.
+Example:
+
+Imagine 10,000 users sending API requests simultaneously.
+
+Node.js doesn't create a separate thread for every request. Instead, it starts the required I/O operations and continues processing other requests while waiting for responses.
+
+When the operations complete, their callbacks are executed by the Event Loop.
 
 ---
 
